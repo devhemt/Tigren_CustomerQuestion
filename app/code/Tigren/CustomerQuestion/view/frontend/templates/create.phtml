@@ -1,0 +1,71 @@
+<form id="create-question-form" method="post">
+    <div class="field">
+        <label class="label" for="customer_name">Your name</label>
+        <div class="control">
+            <input class="input" type="text" id="customer_name" name="customer_name" required>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="title">Question title</label>
+        <div class="control">
+            <input class="input" type="text" id="title" name="title" required>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label" for="content">Question content</label>
+        <div class="control">
+            <textarea class="textarea" id="content" name="content" required></textarea>
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <button type="submit" class="button is-link">Submit</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    document.getElementById("create-question-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const customerName = document.getElementById("customer_name").value;
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("content").value;
+        const graphqlUrl = '/graphql';
+
+        const requestBody = {
+            query: `
+                mutation createQuestion($input: QuestionInput!) {
+                    createQuestion(input: $input) {
+                        message
+                    }
+                }
+            `,
+            variables: {
+                input: {
+                    customer_name: customerName,
+                    title: title,
+                    content: content
+                }
+            }
+        };
+
+        fetch(graphqlUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.data.createQuestion.message === 'success') {
+                // Handle success message
+            } else {
+                // Handle error message
+            }
+        })
+        .catch(error => {
+            // Handle error message
+        });
+    });
+</script>

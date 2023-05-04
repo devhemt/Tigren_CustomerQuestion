@@ -1,0 +1,79 @@
+<?php $question = $block;?>
+<style>
+    #question-table table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #f9f9f9;
+    }
+
+    #question-table table th,
+    #question-table table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    #question-table table th {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+</style>
+<div id="question-table"></div>
+
+<script>
+    fetch('/graphql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            query: `
+              query {
+                getQuestionData {
+                  id
+                  customer_name
+                  title
+                  content
+                }
+              }
+    `       ,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        const questionData = data.data.getQuestionData;
+
+        const table = document.getElementById('question-table');
+
+        const rows = questionData.map(question => {
+            return `
+                <tr>
+                  <td>${question.id}</td>
+                  <td>${question.customer_name}</td>
+                  <td>${question.title}</td>
+                  <td>${question.content}</td>
+                </tr>
+              `;
+        });
+
+        table.innerHTML = `
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Customer Name</th>
+                    <th>Title</th>
+                    <th>Content</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows.join('')}
+                </tbody>
+              </table>
+            `;
+    });
+
+</script>
