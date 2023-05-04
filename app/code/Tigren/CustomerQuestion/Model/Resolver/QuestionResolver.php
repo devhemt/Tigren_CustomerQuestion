@@ -25,10 +25,6 @@ class QuestionResolver implements ResolverInterface
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
         $id = $args['id'];
-        $writer = new \Zend_Log_Writer_Stream(BP . '/var/log/custom.log');
-        $logger = new \Zend_Log();
-        $logger->addWriter($writer);
-        $logger->info(print_r($id, true));
         try {
             $question = $this->questionFactory->create()->load($id);
         } catch (NoSuchEntityException $e) {

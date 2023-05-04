@@ -13,20 +13,19 @@ use Magento\Framework\Exception\LocalizedException;
 
 class Question
 {
-    protected $_objectManager;
+    protected $question;
 
 
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        \Tigren\CustomerQuestion\Model\TigrenCustomerQuestion $question
     ) {
-        $this->_objectManager = $objectManager;
+        $this->question = $question;
     }
 
     public function insertQuestion($data)
     {
         if(is_array($data)) {
-            $video = $this->_objectManager->create('Tigren\CustomerQuestion\Model\TigrenCustomerQuestion');
-            $video->setData($data)->save();
+            $this->question->setData($data)->save();
             return ['message' => 'Success'];
         }
         return ['message' => 'Fail'];

@@ -26,10 +26,8 @@ class EditQuestion implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-
         $input = $args['input'];
         $questionId = $input['id'];
-
 
         $question = $this->questionRepository->load($questionId);
         $question->setData($input);
@@ -38,6 +36,5 @@ class EditQuestion implements ResolverInterface
         return [
             'message' => __('Question updated successfully')
         ];
-
     }
 }
